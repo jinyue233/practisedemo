@@ -39,8 +39,9 @@ public class HouseRoober {
         if (meno[n] >= 0) {
             return meno[n];
         }
-        meno[n] = Math.max(nums[n] + robRecursion2(n-2, nums), robRecursion2(n-1, nums));
-        return meno[n];
+        int result = Math.max(nums[n] + robRecursion2(n-2, nums), robRecursion2(n-1, nums));
+        meno[n] = result;
+        return result;
     }
     /**
      * 方法二的变种：将备忘录数组放进方法里去递归，注意这里方法逻辑不变
@@ -69,7 +70,7 @@ public class HouseRoober {
     }*/
 
     /**
-     * 方法三：采用自底向上的方法（可由递归转化而来）
+     * 方法三：采用传统的自底向上的方法（可由递归转化而来）
      * @param nums
      * @return
      */
@@ -85,5 +86,50 @@ public class HouseRoober {
             result[i] = Math.max(nums[i] + result[i-2], result[i-1]);
         }
         return result[nums.length - 1];
+    }
+
+
+
+    /**
+     * 方法四：Iterative + memo (bottom-up)
+     * 也是自底向上求解，带备忘录的自底向上
+     * @param nums
+     * @return
+     */
+    public int rob4(int[] nums) {
+        if (nums.length == 0) return 0;
+        int[] memo = new int[nums.length + 1];
+        memo[0] = 0;
+        memo[1] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            int val = nums[i];
+            memo[i+1] = Math.max(memo[i], memo[i-1] + val);
+        }
+        return memo[nums.length];
+    }
+
+
+
+
+    /**
+     * 方法五：由方法四改进而来
+     *  Iterative + 2 variables (bottom-up)
+     *  We can notice that in the previous step we use only memo[i] and memo[i-1], so going just 2 steps back.
+     *  We can hold them in 2 variables instead. This optimization is met in Fibonacci sequence creation
+     *  and some other problems [to paste links].
+     * @param nums
+     * @return
+     */
+    /* the order is: prev2, prev1, num  */
+    public int rob5(int[] nums) {
+        if (nums.length == 0) return 0;
+        int prev1 = 0;
+        int prev2 = 0;
+        for (int num : nums) {
+            int tmp = prev1;
+            prev1 = Math.max(prev2 + num, prev1);
+            prev2 = tmp;
+        }
+        return prev1;
     }
 }
