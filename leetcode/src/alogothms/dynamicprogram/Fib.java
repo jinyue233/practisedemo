@@ -1,4 +1,4 @@
-package alogothms;
+package alogothms.dynamicprogram;
 
 import java.util.Arrays;
 

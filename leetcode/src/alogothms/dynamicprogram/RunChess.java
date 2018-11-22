@@ -1,4 +1,4 @@
-package alogothms;
+package alogothms.dynamicprogram;
 
 public class RunChess {
     //题目描述：小兵从左下角往右上角走，只能向上或向右走一步，走法总共有几种？

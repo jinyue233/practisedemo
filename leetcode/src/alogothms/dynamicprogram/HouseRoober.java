@@ -1,4 +1,4 @@
-package alogothms;
+package alogothms.dynamicprogram;
 
 public class HouseRoober {
     /**
