@@ -81,8 +81,10 @@ public class PackageMaxValue {
      * @param W
      * @return
      */
+    static int[][] res = new int[4 + 1][8 + 1];
     public static int maxValue3(int[] value, int[] weight, int n, int W) {
-        int[][] res = new int[n + 1][W + 1];
+
+        System.out.println(res[1][1]);
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= W; j++) {
                 if (weight[i - 1] > j) {
@@ -95,11 +97,48 @@ public class PackageMaxValue {
         return res[n][W];
     }
 
+    /**
+     * 利用递归法找出哪些物品被选中
+     * 这种问题一般依赖于前面的result解。
+     * @param res
+     * @param w
+     * @param v
+     * @param i
+     * @param j
+     * @param item
+     * @return
+     */
+    public static int[] FindWhat(int[][] res, int[] w,int[] v, int i, int j, int[] item)//寻找解的组成方式
+    {
+        if(i>0 && j > 0)
+        {
+            if(res[i][j]==res[i-1][j])//相等说明没装
+            {
+                item[i]=0;//全局变量，标记未被选中
+                FindWhat(res, w, v,i-1,j, item);
+            }
+            else if( j-w[i - 1]>=0 && res[i][j]==res[i-1][j-w[i - 1]]+v[i - 1] )
+            {
+                item[i]=1;//标记已被选中
+                FindWhat(res, w, v,i-1,j - w[i - 1], item);//回到装包之前的位置
+            }
+        }
+        return item;
+    }
+
     public static void main(String[] args) {
-        int[] value = {100, 4, 5, 6};
+        int[] value = {3, 4, 5, 6};
         int[] weight = {2, 3, 4, 5};
-        int W = 4;
+        int W = 8;
         System.out.println(maxValue2(value, weight, 4, W));
         System.out.println(maxValue3(value, weight, 4, W));
+        int[] item = new int[5];
+        int[] item1 = FindWhat(res, weight, value, 4, 8, item);
+        System.out.println("被选中物品的下标：");
+        for (int i = 0; i < item1.length; i++) {
+            if (item1[i] == 1) {
+                System.out.println(i);
+            }
+        }
     }
 }
